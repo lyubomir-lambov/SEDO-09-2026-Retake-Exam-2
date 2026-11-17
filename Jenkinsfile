@@ -6,6 +6,16 @@ pipeline {
     }
 
     stages {
+        stage('Verify Main Branch') {
+            steps {
+                script {
+                    if (env.GIT_BRANCH != 'origin/main' && env.GIT_BRANCH != 'main') {
+                        error("Pipeline is allowed only on main. Current branch: ${env.GIT_BRANCH}")
+                    }
+                }
+            }
+        }
+
         stage('Restore') {
             steps {
                 sh 'dotnet restore Homies.sln'
